@@ -2,7 +2,7 @@
 #define WEBCAMUI_H
 
 #include <QObject>
-
+#include <QDir>
 class WebcamUi: public QObject
 {
     Q_OBJECT
@@ -10,20 +10,35 @@ class WebcamUi: public QObject
 public:
     WebcamUi(QObject *parent = nullptr);
 
-//    Q_PROPERTY(float brightness READ brightness WRITE setBrightness NOTIFY brightnessChanged)
-//    float brightness();
-//    void setBrightness(float value);
-//    Q_SIGNAL void brighnessChanged();
+    Q_PROPERTY(QStringList imagesList READ imagesList WRITE setImagesList NOTIFY imagesListChanged)
+    QStringList imagesList();
+    void setImagesList(QStringList value);
+    Q_SIGNAL void imagesListChanged();
 
-//    Q_PROPERTY(float contrast READ contrast WRITE setContrast NOTIFY contrastChanged)
+    Q_PROPERTY(int photoCounter READ photoCounter WRITE setPhotoCounter NOTIFY photoCounterChanged)
+    int photoCounter() {return _photoCounter;}
+    void setPhotoCounter(int value);
+    Q_SIGNAL void photoCounterChanged();
+
+    Q_PROPERTY(QString imagesPath READ imagesPath WRITE setImagesPath NOTIFY imagesPathChanged)
+    QString imagesPath();
+    void setImagesPath(QString value);
+    Q_SIGNAL void imagesPathChanged();
+
+    // these signals trigger from QML part
+signals:
+    void btnCaptureClicked();
+
+    // these signals trigger form c++ part
+
+
 
 
 private:
-    float _brightness;
-    float _contrast;
-    float _saturation;
-    float _sharpness;
-    float _denoising;
+    QStringList _imagesList;
+    int _photoCounter;
+    QString _path;
+
 
 };
 

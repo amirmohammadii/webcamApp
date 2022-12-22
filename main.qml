@@ -1,12 +1,14 @@
-import QtQuick 2.12
+import QtQuick 2.14
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.3
+import QtQuick.Controls.Styles 1.2
+import QtQuick.Controls.Material 2.1
 import QtMultimedia 5.12
 import QtQuick.Templates 2.3 as T
 import QtGraphicalEffects 1.0
 
-Window {
+Item {
     property int  font_size: 18
     property int  soft_margin: 2
     property string  font_name: "Ubuntu"
@@ -14,29 +16,17 @@ Window {
     property string bg_color: "lightgray"
     property string txt_whiteBalanceMode: "Camera.WhiteBalanceTungsten"
     property string txt_color_filter: "CameraImageProcessing.ColorFilterNone"
-
-    visible: true
-    width: 1200
-    height: 1000
-    //    minimumWidth: 1300
-    //    maximumWidth: 1500
-    //    minimumHeight: 900
-    //    maximumHeight: 1100
-
+    property string path : bridge.imagesPath
+    width: 1360
+    height: 700
     RowLayout
     {
-        id: row_layout
+        id: main_row_layout
         anchors.fill: parent
-        spacing: 6
-
-
         Rectangle{
             id: rec_setting
-            Layout.fillWidth: true
-            Layout.minimumWidth: 100
-            Layout.preferredWidth: 300
-            Layout.maximumWidth: 400
-            Layout.minimumHeight: parent.height
+            width: 350
+            Layout.fillHeight: true
             color: bg_color
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.margins: soft_margin
@@ -48,9 +38,7 @@ Window {
                 font.pixelSize: font_size
                 color: text_color
                 anchors.horizontalCenter: parent.horizontalCenter
-//                Layout.margins: 30
                 padding: 10
-                //                Layout.alignment: Qt.AlignTop | Qt.AlignCenter
             }
 
             ColumnLayout
@@ -82,7 +70,7 @@ Window {
                     }
                     Text {
                         id: lbl_brightenss_value
-                        text: sld_brightness.value.toFixed(1)  //qsTr("0.5")
+                        text: sld_brightness.value.toFixed(1)
                         Layout.alignment: Qt.AlignRight
                     }
                 }
@@ -201,211 +189,251 @@ Window {
                     Layout.margins: 30
 
 
-                ButtonGroup { id: whiteBalance }
-                Column {
-                    Layout.alignment: Qt.AlignLeft
-                    Layout.fillWidth: true
-                    Label {
-                        text: qsTr("White Balance Mode:")
-                    }
+                    ButtonGroup { id: whiteBalance }
+                    Column {
+                        Layout.alignment: Qt.AlignLeft
+                        Layout.fillWidth: true
+                        Label {
+                            text: qsTr("White Balance Mode:")
+                        }
 
-                    RadioButton {
-                        id: rbtn_auto
-                        checked: true
-                        text: qsTr("Auto")
-                        enabled: true
-                        ButtonGroup.group: whiteBalance
-                        onToggled: {
-                            txt_whiteBalanceMode = "Camera.WhiteBalanceAuto"
-                            console.log(txt_whiteBalanceMode)
+                        RadioButton {
+                            id: rbtn_auto
+                            checked: true
+                            text: qsTr("Auto")
+                            enabled: true
+                            ButtonGroup.group: whiteBalance
+                            onClicked: {
+                                txt_whiteBalanceMode = "Camera.WhiteBalanceAuto"
+                                console.log(txt_whiteBalanceMode)
+                            }
                         }
-                    }
 
-                    RadioButton {
-                        id: rbtn_sunlight
-                        text: qsTr("Sunlight")
-                        ButtonGroup.group: whiteBalance
-                        onToggled: {
-                            txt_whiteBalanceMode = "Camera.WhiteBalanceSunlight"
-                            console.log(txt_whiteBalanceMode)
+                        RadioButton {
+                            id: rbtn_sunlight
+                            text: qsTr("Sunlight")
+                            ButtonGroup.group: whiteBalance
+                            onClicked: {
+                                txt_whiteBalanceMode = "Camera.WhiteBalanceSunlight"
+                                console.log(txt_whiteBalanceMode)
+                            }
                         }
-                    }
 
-                    RadioButton {
-                        id: rbtn_cloudy
-                        text: qsTr("Cloudy")
-                        ButtonGroup.group: whiteBalance
-                        onToggled: {
-                            txt_whiteBalanceMode = "Camera.WhiteBalanceCloudy"
-                            console.log(txt_whiteBalanceMode)
+                        RadioButton {
+                            id: rbtn_cloudy
+                            text: qsTr("Cloudy")
+                            ButtonGroup.group: whiteBalance
+                            onClicked: {
+                                txt_whiteBalanceMode = "Camera.WhiteBalanceCloudy"
+                                console.log(txt_whiteBalanceMode)
+                            }
+                        }
+                        RadioButton {
+                            id: rbtn_shade
+                            text: qsTr("Shade")
+                            ButtonGroup.group: whiteBalance
+                            onClicked:  {
+                                txt_whiteBalanceMode = "Camera.WhiteBalanceShade"
+                                console.log(txt_whiteBalanceMode)
+                            }
+                        }
+                        RadioButton {
+                            id: rbtn_sunset
+                            text: qsTr("Sunset")
+                            ButtonGroup.group: whiteBalance
+                            onClicked: {
+                                txt_whiteBalanceMode = "Camera.WhiteBalanceSunset"
+                                console.log(txt_whiteBalanceMode)
+                            }
+                        }
+                        RadioButton {
+                            id: rbtn_fluorescent
+                            text: qsTr("Fluorescent")
+                            ButtonGroup.group: whiteBalance
+                            onClicked: {
+                                txt_whiteBalanceMode = "Camera.WhiteBalanceFluorescent"
+                                console.log(txt_whiteBalanceMode)
+                            }
                         }
                     }
-                    RadioButton {
-                        id: rbtn_shade
-                        text: qsTr("Shade")
-                        ButtonGroup.group: whiteBalance
-                        onToggled: {
-                            txt_whiteBalanceMode = "Camera.WhiteBalanceShade"
-                            console.log(txt_whiteBalanceMode)
+                    ButtonGroup { id: colorFilter }
+                    Column {
+                        Layout.alignment: Qt.AlignRight
+                        Label {
+                            text: qsTr("Color Filter:")
                         }
-                    }
-                    RadioButton {
-                        id: rbtn_sunset
-                        text: qsTr("Sunset")
-                        ButtonGroup.group: whiteBalance
-                        onToggled: {
-                            txt_whiteBalanceMode = "Camera.WhiteBalanceSunset"
-                            console.log(txt_whiteBalanceMode)
+
+                        RadioButton {
+                            id: rbtn_none
+                            checked: true
+                            text: qsTr("None")
+                            enabled: true
+                            ButtonGroup.group: colorFilter
+                            onClicked: {
+                                txt_color_filter = "CameraImageProcessing.ColorFilterNone"
+                                console.log(txt_color_filter)
+                            }
                         }
-                    }
-                    RadioButton {
-                        id: rbtn_fluorescent
-                        text: qsTr("Fluorescent")
-                        ButtonGroup.group: whiteBalance
-                        onToggled: {
-                            txt_whiteBalanceMode = "Camera.WhiteBalanceFluorescent"
-                            console.log(txt_whiteBalanceMode)
+
+                        RadioButton {
+                            id: rbtn_grayscale
+                            text: qsTr("Grayscale")
+                            ButtonGroup.group: colorFilter
+                            onClicked: {
+                                txt_color_filter = "CameraImageProcessing.ColorFilterGrayscale"
+                                console.log(txt_color_filter)
+                            }
+                        }
+
+                        RadioButton {
+                            id: rbtn_negative
+                            text: qsTr("Negative")
+                            ButtonGroup.group: colorFilter
+                            onClicked: {
+                                txt_color_filter = "CameraImageProcessing.ColorFilterNegative"
+                                console.log(txt_color_filter)
+                            }
+                        }
+                        RadioButton {
+                            id: rbtn_solarize
+                            text: qsTr("Solarize")
+                            ButtonGroup.group: colorFilter
+                            onClicked: {
+                                txt_color_filter = "CameraImageProcessing.ColorFilterSolarize"
+                                console.log(txt_color_filter)
+                            }
+                        }
+                        RadioButton {
+                            id: rbtn_sepia
+                            text: qsTr("Sepia")
+                            ButtonGroup.group: colorFilter
+                            onClicked: {
+                                txt_color_filter = "CameraImageProcessing.ColorFilterSepia"
+                                console.log(txt_color_filter)
+                            }
+                        }
+                        RadioButton {
+                            id: rbtn_posterize
+                            text: qsTr("Posterize")
+                            ButtonGroup.group: colorFilter
+                            onClicked: {
+                                txt_color_filter = "CameraImageProcessing.ColorFilterPosterize"
+                                console.log(txt_color_filter)
+                            }
                         }
                     }
                 }
-                ButtonGroup { id: colorFilter }
-                Column {
-                    Layout.alignment: Qt.AlignRight
-                    Label {
-                        text: qsTr("Color Filter:")
-                    }
-
-                    RadioButton {
-                        id: rbtn_none
-                        checked: true
-                        text: qsTr("None")
-                        enabled: true
-                        ButtonGroup.group: colorFilter
-                        onToggled: {
-                            txt_color_filter = "CameraImageProcessing.ColorFilterNone"
-                            console.log(txt_color_filter)
-                        }
-                    }
-
-                    RadioButton {
-                        id: rbtn_grayscale
-                        text: qsTr("Grayscale")
-                        ButtonGroup.group: colorFilter
-                        onToggled: {
-                            txt_color_filter = "CameraImageProcessing.ColorFilterGrayscale"
-                            console.log(txt_color_filter)
-                        }
-                    }
-
-                    RadioButton {
-                        id: rbtn_negative
-                        text: qsTr("Negative")
-                        ButtonGroup.group: colorFilter
-                        onToggled: {
-                            txt_color_filter = "CameraImageProcessing.ColorFilterNegative"
-                            console.log(txt_color_filter)
-                        }
-                    }
-                    RadioButton {
-                        id: rbtn_solarize
-                        text: qsTr("Solarize")
-                        ButtonGroup.group: colorFilter
-                        onToggled: {
-                            txt_color_filter = "CameraImageProcessing.ColorFilterSolarize"
-                            console.log(txt_color_filter)
-                        }
-                    }
-                    RadioButton {
-                        id: rbtn_sepia
-                        text: qsTr("Sepia")
-                        ButtonGroup.group: colorFilter
-                        onToggled: {
-                            txt_color_filter = "CameraImageProcessing.ColorFilterSepia"
-                            console.log(txt_color_filter)
-                        }
-                    }
-                    RadioButton {
-                        id: rbtn_posterize
-                        text: qsTr("Posterize")
-                        ButtonGroup.group: colorFilter
-                        onToggled: {
-                            txt_color_filter = "CameraImageProcessing.ColorFilterPosterize"
-                            console.log(txt_color_filter)
-                        }
-                    }
-                }
-            }
             }
         }
-        ColumnLayout{
-            id: col_layout_tabview
+
+        Rectangle
+        {
+            id: rec_main_view
+            Layout.fillHeight: true
             Layout.fillWidth: true
-            anchors.centerIn: col_layout_tabview.Center
+            //            color: "red"
+            Layout.margins: 5
 
-            TabBar{
-                id: tabBar
-                //width: parent.width
-                Layout.fillWidth: true
-                Layout.margins:  soft_margin
-                Layout.topMargin: 10
-                Layout.alignment: Qt.AlignTop
-                background: Rectangle{
-                    color: "white"
-                }
+            ColumnLayout
+            {
+                id: clm_main_view
+                anchors.fill: parent
 
-                TabButton{
-                    text: qsTr("Take Photo")
-                    background: Rectangle {
-                        color: tabBar.currentIndex == 0 ? "steelblue" : "lightgray"
-                        radius: 10
+                TabBar{
+                    id: tabBar
+                    width:850 // parent.width
+                    Layout.fillWidth: true
+                    Layout.margins:  soft_margin
+                    Layout.topMargin: 10
+                    Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+                    background: Rectangle{
+                        color: "white"
                     }
 
-                }
-                TabButton{
-                    text: qsTr("Galley")
-                    background: Rectangle {
-                        color: tabBar.currentIndex == 1 ? "steelblue" : "lightgray"
-                        radius: 10
-                    }
-                }
-                TabButton{
-                    text: qsTr("Send Data")
-                    background: Rectangle {
-                        color: tabBar.currentIndex == 2 ? "steelblue" : "lightgray"
-                        radius: 10
-                    }
-                }
-            }
+                    TabButton{
+                        text: qsTr("Take Photo")
+                        background: Rectangle {
+                            color: tabBar.currentIndex == 0 ? "steelblue" : "lightgray"
+                            radius: 10
+                        }
 
-            Rectangle{
-                id: rec_tabView
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                //            Layout.minimumWidth: 800
-                //            Layout.preferredWidth: 1000
-                //            Layout.maximumWidth: 1200
-                //            Layout.minimumHeight: parent.height
-                color: bg_color
-                Layout.alignment: Qt.AlignRight
-                Layout.margins: soft_margin
+                    }
+                    TabButton{
+                        text: qsTr("Galley")
+                        background: Rectangle {
+                            color: tabBar.currentIndex == 1 ? "steelblue" : "lightgray"
+                            radius: 10
+                        }
+                    }
+                    TabButton{
+                        text: qsTr("Send Data")
+                        background: Rectangle {
+                            color: tabBar.currentIndex == 2 ? "steelblue" : "lightgray"
+                            radius: 10
+                        }
+                    }
+                }
+                //                Rectangle{
+                //                    id: rec_tabView
+                //                    Layout.fillWidth: true
+                //                    Layout.fillHeight: true
+                //                    color: "red"//bg_color
+                //                    Layout.alignment: Qt.AlignRight
+                //                    Layout.margins: soft_margin
 
                 StackLayout{
                     id: stacklayout
-
+                    Layout.alignment:  Qt.AlignTop
                     width: parent.width
-                    height: parent.height
-                    //anchors.centerIn: parent
+                    //                        height: parent.height
                     currentIndex: tabBar.currentIndex
 
                     Rectangle{
-                        id: take_photo_tab
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        //        Text {
-                        //            text: qsTr("TAKE PHOTO")
-                        //            anchors.centerIn: parent
-                        //        }
+                        id: rec_webcam_view
+                        Layout.alignment: Qt.AlignTop | Qt.AlignCenter
+                        //                            Layout.fillWidth: true
+                        height: 350
+                        width: 550
+                        Rectangle{
+                            id: rec_btn
+                            width: parent.width
+                            height: 40
+                            //                                color: bg_color
+                            RowLayout
+                            {
 
+                                id: row_btn
+                                width: parent.width
+                                height: parent.height
+                                Text {
+                                    id: photoCounter
+                                    text: "#Photos:"+bridge.photoCounter
+                                    font.family: font_name
+                                    font.pixelSize: font_size
+                                    color: "red"
+                                    Layout.alignment: Qt.AlignLeft
+                                }
+                                Button{
+                                    id: btn_takePhoto
+                                    text: "Take Photo"
+                                    Layout.alignment: Qt.AlignLeft
+                                    background: Rectangle {
+                                        color: btn_takePhoto.down? "darkgray" :"gray"
+                                        border.color: "black"
+                                        radius: 8
+                                    }
+                                    onClicked: {
+                                        //  camera.imageCapture.captureToLocation("/home/amir/WebcamImages")
+                                        camera.imageCapture.captureToLocation(path)
+                                        bridge.btnCaptureClicked()
+                                        repeater.model = bridge.imagesList
+                                    }
+
+
+                                }
+                            }
+
+                        }
                         Camera {
                             id: camera
                             imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
@@ -415,20 +443,22 @@ Window {
                                 exposureMode: Camera.ExposurePortrait
                             }
 
+
                             flash.mode: Camera.FlashRedEyeReduction
 
-                            imageCapture {
-                                onImageCaptured: {
-                                    photoPreview.source = preview  // Show the preview in an Image
-                                }
-                            }
+                            //                                                        imageCapture {
+                            //                                                            onImageCaptured: {
+                            //                                                                photoPreview.source = preview  // Show the preview in an Image
+                            //                                                            }
+
+                            //                                                        }
                             imageProcessing {
                                 whiteBalanceMode: txt_whiteBalanceMode //Camera.WhiteBalanceTungsten
-//                                {
-//                                    rbtn_auto.checked ?Camera.WhiteBalanceAuto :
-//                                                        rbtn_cloudy.checked ? Camera.WhiteBalanceCloudy :
-//                                                                              rbtn_shade.checked ? Camera.WhiteBalanceShade : Camera.WhiteBalanceTungsten
-//                                }
+                                //                                {
+                                //                                    rbtn_auto.checked ?Camera.WhiteBalanceAuto :
+                                //                                                        rbtn_cloudy.checked ? Camera.WhiteBalanceCloudy :
+                                //                                                                              rbtn_shade.checked ? Camera.WhiteBalanceShade : Camera.WhiteBalanceTungsten
+                                //                                }
 
                                 contrast: sld_contrast.value
                                 saturation: sld_saturation.value
@@ -448,36 +478,42 @@ Window {
 
                         Image {
                             id: photoPreview
+                            width: rec_webcam_view.width
+                            height: rec_webcam_view.height
                         }
-                        RowLayout
-                        {
-                            id: row_btn
-                            anchors.bottom: parent.bottom
-                            width: parent.width
-                            height: 40
-                            Rectangle{
-                                id: rec_btn
-                                Layout.fillHeight: true
-                                Layout.fillWidth: true
-                                color: bg_color
-                                Button{
-                                    id: btn_takePhoto
-                                    text: "Take Photo"
-                                    anchors.centerIn: parent
-                                    onClicked: {
-                                        camera.imageCapture
-                                    }
 
-
-                                }
-                            }
-                        }
                     }
                     Rectangle{
                         id: galley_tab
-                        Text {
-                            text: qsTr("GALLERY")
-                            anchors.centerIn: parent
+
+                        Rectangle{
+                            anchors.fill: parent
+                            ScrollView
+                            {
+                                id: scroll_view
+                                clip: true
+                                anchors.fill: parent
+                                anchors.bottomMargin: 50
+
+                                GridLayout{
+                                    id: grid_layout
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    columns: 3
+                                    rowSpacing: 4
+                                    columnSpacing: 5
+                                    Repeater{
+                                        id: repeater
+                                        model:  bridge.imagesList
+                                        Image {
+                                            source: "file://"+ path + "/"  +modelData // "/images/IMG_00000001.jpg"
+                                            sourceSize.width:  320
+                                            sourceSize.height: 300
+                                            Layout.alignment: Qt.AlignTop | Qt.AlignLeft
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                     Rectangle{
@@ -490,92 +526,13 @@ Window {
                     }
                 }
 
+                //                }
 
-                //                        TabView{
-                //                            id: tabview
-                //                            height: parent.height
-                //                            width: parent.width
-                //                            Layout.margins: soft_margin
-                //                            //        Layout.right: parent.right
-                //                            Layout.alignment: Qt.AlignLeft
-                //                            Tab{
-                //                                title: "Take Photo"
-                //                                Rectangle{
-                //                                    color: "black"
-                //                                    Camera {
-                //                                        id: camera
+            } //clm_main_view
 
-                //                                        imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
-
-                //                                        exposure {
-                //                                            exposureCompensation: -1.0
-                //                                            exposureMode: Camera.ExposurePortrait
-                //                                        }
-
-                //                                        flash.mode: Camera.FlashRedEyeReduction
-
-                //                                        imageCapture {
-                //                                            onImageCaptured: {
-                //                                                photoPreview.source = preview  // Show the preview in an Image
-                //                                            }
-                //                                        }
-                //                                        imageProcessing {
-                //                                            whiteBalanceMode: Camera.WhiteBalanceTungsten
-                //                                            contrast: -20.66
-                //                                            saturation: -5.5
-                //                                            brightness: 10
-                //                                            denoisingLevel: 80
-                //                                            manualWhiteBalance: 20
-                //                                            sharpeningLevel: 30
-
-                //                                        }
-                //                                    }
-                //                                    VideoOutput {
-                //                                        source: camera
-                //                                        anchors.fill: parent
-                //                                        focus : visible // to receive focus and capture key events when visible
-                //                                    }
-
-                //                                    Image {
-                //                                        id: photoPreview
-                //                                    }
-                //                                    RowLayout
-                //                                    {
-                //                                        id: row_btn
-                //                                        anchors.bottom: parent.bottom
-                //                                        width: parent.width
-                //                                        height: 40
-                //                                        Rectangle{
-                //                                            id: rec_btn
-                //                                            Layout.fillHeight: true
-                //                                            Layout.fillWidth: true
-                //                                            color: bg_color
-                //                                            Button{
-                //                                                id: btn_takePhoto
-                //                                                text: "Take Photo"
-                //                                                anchors.centerIn: parent
-
-                //                                            }
-                //                                        }
-                //                                    }
-                //                                }
-                //                            }
-                //                            Tab{
-                //                                title: "Gallery"
-                //                                Rectangle{
-                //                                    color: "steelblue"
-                //                                }
-                //                            }
-                //                            Tab{
-                //                                title: "Send"
-                //                                Rectangle{
-                //                                    color: "orange"
-                //                                }
-                //                            }
-                //                        }
-            }
-        }
-    } // col_layout
-} // window
+        } // rec_main_view
 
 
+
+    } // main_row_layout
+}
