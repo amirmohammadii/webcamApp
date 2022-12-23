@@ -4,8 +4,9 @@
 #include <QDebug>
 #include <QSharedPointer>
 #include <QObject>
-
 #include <WebcamUi.h>
+#include <MyClient.h>
+#include <MyServer.h>
 
 class WebCamHandler:public QObject
 {
@@ -18,9 +19,11 @@ public:
 
 public slots:
     void onBtnCaptureClicked();
+    void onBtnSendClicked();
 
 private:
     WebcamUi* _webcamui;
+    MyClient*  _client;
 
 };
 

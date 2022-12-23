@@ -25,19 +25,22 @@ public:
     void setImagesPath(QString value);
     Q_SIGNAL void imagesPathChanged();
 
+    Q_PROPERTY(QString selectedImagePath READ selectedImagePath WRITE setSelectedImagePath NOTIFY selectedImagePathChanged)
+    QString selectedImagePath();
+    void setSelectedImagePath(QString value);
+    Q_SIGNAL void selectedImagePathChanged();
+
     // these signals trigger from QML part
 signals:
     void btnCaptureClicked();
-
-    // these signals trigger form c++ part
-
-
+    void btnSendClicked();
 
 
 private:
     QStringList _imagesList;
     int _photoCounter;
     QString _path;
+    QString _selectedImagePath;
 
 
 };

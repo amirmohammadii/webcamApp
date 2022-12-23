@@ -4,7 +4,11 @@ WebCamHandler::WebCamHandler(QSharedPointer<WebcamUi> _ui, QObject* parent):
     QObject(parent)
 {
     _webcamui = _ui.data();
+    _client = new MyClient(_ui);
+    MyServer* server = new MyServer();
+    
     connect(_webcamui , &WebcamUi::btnCaptureClicked, this , &WebCamHandler::onBtnCaptureClicked);
+    connect(_webcamui , &WebcamUi::btnSendClicked, this , &WebCamHandler::onBtnSendClicked);
 
     QDir path = createPath();
     _webcamui->setImagesPath(path.absolutePath());
@@ -36,4 +40,9 @@ void WebCamHandler::onBtnCaptureClicked()
     QStringList images = readImages(createPath());
     _webcamui->setImagesList(images);
 
+}
+
+void WebCamHandler::onBtnSendClicked()
+{
+    _client->sendData(_webcamui->selectedImagePath());
 }

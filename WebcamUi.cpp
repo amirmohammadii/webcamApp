@@ -13,11 +13,8 @@ QStringList WebcamUi::imagesList()
 
 void WebcamUi::setImagesList(QStringList value)
 {
-    if (_imagesList != value)
-    {
         _imagesList = value;
         emit imagesListChanged();
-    }
 }
 
 void WebcamUi::setPhotoCounter(int value)
@@ -36,4 +33,15 @@ void WebcamUi::setImagesPath(QString value)
 {
     this->_path = value;
     emit imagesPathChanged();
+}
+
+QString WebcamUi::selectedImagePath()
+{
+    return this->_selectedImagePath;
+}
+
+void WebcamUi::setSelectedImagePath(QString value)
+{
+    _selectedImagePath = value;
+    emit selectedImagePathChanged();
 }

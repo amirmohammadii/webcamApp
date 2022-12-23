@@ -7,6 +7,8 @@ import QtQuick.Controls.Material 2.1
 import QtMultimedia 5.12
 import QtQuick.Templates 2.3 as T
 import QtGraphicalEffects 1.0
+import QtQuick.Dialogs 1.2
+
 
 Item {
     property int  font_size: 18
@@ -353,7 +355,7 @@ Item {
                     TabButton{
                         text: qsTr("Take Photo")
                         background: Rectangle {
-                            color: tabBar.currentIndex == 0 ? "steelblue" : "lightgray"
+                            color: tabBar.currentIndex == 0 ? "darkgray" : "lightgray"
                             radius: 10
                         }
 
@@ -361,14 +363,14 @@ Item {
                     TabButton{
                         text: qsTr("Galley")
                         background: Rectangle {
-                            color: tabBar.currentIndex == 1 ? "steelblue" : "lightgray"
+                            color: tabBar.currentIndex == 1 ? "darkgray" : "lightgray"
                             radius: 10
                         }
                     }
                     TabButton{
                         text: qsTr("Send Data")
                         background: Rectangle {
-                            color: tabBar.currentIndex == 2 ? "steelblue" : "lightgray"
+                            color: tabBar.currentIndex == 2 ? "darkgray" : "lightgray"
                             radius: 10
                         }
                     }
@@ -418,9 +420,9 @@ Item {
                                     text: "Take Photo"
                                     Layout.alignment: Qt.AlignLeft
                                     background: Rectangle {
-                                        color: btn_takePhoto.down? "darkgray" :"gray"
+                                        color: btn_takePhoto.down? "gray" :"darkgray"
                                         border.color: "black"
-                                        radius: 8
+                                        radius: 6
                                     }
                                     onClicked: {
                                         //  camera.imageCapture.captureToLocation("/home/amir/WebcamImages")
@@ -506,7 +508,7 @@ Item {
                                         id: repeater
                                         model:  bridge.imagesList
                                         Image {
-                                            source: "file://"+ path + "/"  +modelData // "/images/IMG_00000001.jpg"
+                                            source: "file://"+ path + "/"  +modelData
                                             sourceSize.width:  320
                                             sourceSize.height: 300
                                             Layout.alignment: Qt.AlignTop | Qt.AlignLeft
@@ -518,10 +520,71 @@ Item {
                     }
                     Rectangle{
                         id: send_data_tab
-                        color: "red"
-                        Text {
-                            text: qsTr("SEND DATA")
-                            anchors.centerIn: parent
+                        ColumnLayout
+                        {
+                            id: clmn_layout
+                            anchors.margins: 50
+                            anchors.fill: parent
+                            Image {
+                                id: img_selected
+                                source: file_dialog.fileUrl
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+                                Layout.alignment: Qt.AlignCenter
+                                sourceSize.width: 520
+                                sourceSize.height: 480
+                            }
+                            RowLayout{
+                                id: row_layout
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+
+                                Button{
+                                    id: btn_choose_img
+                                    text: "Choose"
+                                    Layout.margins: 10
+                                    background: Rectangle {
+                                        width: 70
+                                        color: btn_choose_img.down? "gray" :"darkgray"
+                                        border.color: "black"
+                                        radius: 6
+                                    }
+                                    FileDialog{
+                                        id: file_dialog
+                                        title: " Please choose an image:"
+                                        nameFilters: [ "Image files (*.jpg *.png)" ]
+                                        selectExisting: true
+                                        selectFolder: false
+                                        selectMultiple: false
+                                        folder: shortcuts.home
+                                        onFileUrlChanged:  {
+//                                            selected_image_path = file_dialog.fileUrl
+                                            bridge.selectedImagePath = file_dialog.fileUrl
+                                        }
+
+                                    }
+
+                                    onClicked: {
+                                        file_dialog.open()
+//                                        bridge.selectedImagePath = selected_image_path //file_dialog.fileUrl
+//                                        console.log("3"+selected_image_path)
+                                    }
+
+
+                                }
+                                Button{
+                                    id: btn_send_img
+                                    text: "Send"
+                                    Layout.margins: 10
+                                    background: Rectangle {
+                                        color: btn_send_img.down? "gray" :"darkgray"
+                                        border.color: "black"
+                                        radius: 6
+                                    }
+                                    onClicked: {
+                                        bridge.btnSendClicked()
+                                    }
+                                }
+                            }
                         }
                     }
                 }
