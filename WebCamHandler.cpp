@@ -5,8 +5,8 @@ WebCamHandler::WebCamHandler(QSharedPointer<WebcamUi> _ui, QObject* parent):
 {
     _webcamui = _ui.data();
     _client = new MyClient(_ui);
-    MyServer* server = new MyServer();
     
+    // ### connect signals and slots ### //
     connect(_webcamui , &WebcamUi::btnCaptureClicked, this , &WebCamHandler::onBtnCaptureClicked);
     connect(_webcamui , &WebcamUi::btnSendClicked, this , &WebCamHandler::onBtnSendClicked);
 

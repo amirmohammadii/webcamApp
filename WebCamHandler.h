@@ -14,11 +14,27 @@ class WebCamHandler:public QObject
 public:
    explicit WebCamHandler(QSharedPointer<WebcamUi> _ui, QObject* parent = nullptr);
 
+    ///
+    /// \brief readImages
+    /// \param dir: direcoty that contains captured photos.
+    /// \return a list of captured images.
+    ///
     QStringList readImages(QDir dir);
+    ///
+    /// \brief createPath
+    /// \return return the created a directory that images will save in it.
+    ///
     QDir createPath();
 
 public slots:
+    ///
+    /// \brief onBtnCaptureClicked
+    ///This function call when the "Take Photo" clicked
+    ///
     void onBtnCaptureClicked();
+    ///
+    /// \brief onBtnSendClicked
+    ///This function call will "Send" button  clicked
     void onBtnSendClicked();
 
 private:

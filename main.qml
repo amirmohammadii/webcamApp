@@ -2,7 +2,6 @@ import QtQuick 2.14
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.2
 import QtQuick.Controls.Material 2.1
 import QtMultimedia 5.12
 import QtQuick.Templates 2.3 as T
@@ -11,253 +10,332 @@ import QtQuick.Dialogs 1.2
 
 
 Item {
-    property int  font_size: 18
-    property int  soft_margin: 2
-    property string  font_name: "Ubuntu"
-    property string text_color: "#1F1F1F"
-    property string bg_color: "lightgray"
-    property string txt_whiteBalanceMode: "Camera.WhiteBalanceTungsten"
-    property string txt_color_filter: "CameraImageProcessing.ColorFilterNone"
-    property string path : bridge.imagesPath
+
+    // ######################## Properties ########################
+
+    property string   font_name                    : "Ubuntu"
+    property string   text_color                     : "#3D5656"//"#1F1F1F"
+    property string   bg_color                       : "#04293A" // second_color
+    property string   border_color                 : "#064663"// "black"
+    property string   main_color                   : "#D5CEA3" // "white"
+    property string   first_color                     : "#FED049"
+    property string   second_color                :"#68B984"
+    property string   button_color1                : "#AD8E70"
+    property string   button_color2                : "#FFDB89"
+    property int        font_size                       : 18
+    property int        soft_margin                  : 2
+    property int        padding_value             : 8
+    property int        border_width                : 1
+    property double  slider_min_value          : -1.0
+    property double  slider_max_value         : +1.0
+    property double  slider_step_value         : 0.1
+    property var        txt_whiteBalanceMode: Camera.WhiteBalanceTungsten
+    property var        txt_color_filter             : CameraImageProcessing.ColorFilterNone
+    property string    path                            : bridge.imagesPath
+
+    // #######################################################
+
     width: 1360
     height: 700
+    Rectangle{
+        anchors.fill: parent
+        color: main_color
+
     RowLayout
     {
         id: main_row_layout
         anchors.fill: parent
+        // ####################### Setting part #######################
         Rectangle{
-            id: rec_setting
-            width: 350
-            Layout.fillHeight: true
-            color: bg_color
+            id                       : rec_setting
+            width                  : 360
+            Layout.fillHeight : true
+            color                   : main_color
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Layout.margins: soft_margin
+            Layout.margins   : soft_margin
+            border.color         : border_color
+            border.width:        border_width
+
 
             Text {
-                id: lbl_setting
-                text: qsTr("<b>SETTINGS<b>")
-                font.family: font_name
-                font.pixelSize: font_size
-                color: text_color
+                id                                     : lbl_setting
+                text                                  :  qsTr("<b>SETTINGS<b>")
+                font.family                       : font_name
+                font.pixelSize                   : font_size
+                color                                : text_color
                 anchors.horizontalCenter: parent.horizontalCenter
-                padding: 10
+                padding                            : 10
             }
 
             ColumnLayout
             {
-                id: col_settings
-                width: parent.width
+                id                : col_settings
+                width          : parent.width
                 anchors.top: lbl_setting.bottom
 
+                //  #################### Brightness ####################
                 RowLayout{
-                    id: row_brightness
-                    Layout.fillWidth: true
+                    id                         : row_brightness
+                    Layout.fillWidth   : true
                     Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                     Layout.topMargin: 20
 
                     Text {
-                        id: lbl_brightness
+                        id                      : lbl_brightness
                         Layout.fillWidth: true
-                        text: qsTr("Brightness")
-                        color: text_color
+                        text                   : qsTr("Brightness")
+                        color                  : text_color
+                        leftPadding        : padding_value
+
                     }
                     Slider {
-                        id: sld_brightness
+                        id                      : sld_brightness
                         Layout.fillWidth: true
-                        from: -1.0
-                        value: -0.4
-                        to: 1.0
-                        snapMode: Slider.SnapAlways
-                        stepSize: 0.1
+                        from                  : slider_min_value
+                        to                      :slider_max_value
+                        stepSize            : slider_step_value
+                        value                 : -0.4
+                        snapMode         : Slider.SnapAlways
+
                     }
                     Text {
-                        id: lbl_brightenss_value
-                        text: sld_brightness.value.toFixed(1)
+                        id                        : lbl_brightenss_value
+                        text                     : sld_brightness.value.toFixed(1)
                         Layout.alignment: Qt.AlignRight
+                        rightPadding        : padding_value
+                        color                    : text_color
                     }
                 }
+                //  #################### Contrast ####################
                 RowLayout{
-                    id: row_contrast
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignTop | Qt.AlignLeft
-                    Layout.topMargin: 20
+                    id                          : row_contrast
+                    Layout.fillWidth    : true
+                    Layout.alignment : Qt.AlignTop | Qt.AlignLeft
+                    Layout.topMargin : 20
 
                     Text {
-                        id: lbl_contrast
+                        id                      : lbl_contrast
                         Layout.fillWidth: true
-                        text: qsTr("Contrast")
-                        color: text_color
+                        text                  : qsTr("Contrast")
+                        color                : text_color
+                        leftPadding      : padding_value
                     }
                     Slider {
-                        id: sld_contrast
+                        id                      : sld_contrast
                         Layout.fillWidth: true
-                        from: -1.0
-                        value: 0.3
-                        to: 1.0
-                        snapMode: Slider.SnapAlways
-                        stepSize: 0.1
+                        from                 : slider_min_value
+                        stepSize           : slider_step_value
+                        to                     : slider_max_value
+                        value                : 0.3
+                        snapMode        : Slider.SnapAlways
+
                     }
                     Text {
-                        id: lbl_contrast_value
-                        text: sld_contrast.value.toFixed(1) //qsTr("1.8")
+                        id                         : lbl_contrast_value
+                        text                     : sld_contrast.value.toFixed(1)
                         Layout.alignment: Qt.AlignRight
+                        rightPadding        : padding_value
+                        color                    : text_color
                     }
                 }
-
+                //  #################### Saturation ####################
                 RowLayout{
-                    id: row_saturation
-                    Layout.fillWidth: true
+                    id                        : row_saturation
+                    Layout.fillWidth   : true
                     Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                     Layout.topMargin: 20
 
                     Text {
-                        id: lbl_saturation
+                        id                      : lbl_saturation
                         Layout.fillWidth: true
-                        text: qsTr("Saturation")
-                        color: text_color
+                        text                  : qsTr("Saturation")
+                        color                 : text_color
+                        leftPadding       : padding_value
                     }
                     Slider {
-                        id: sld_saturation
+                        id                      : sld_saturation
                         Layout.fillWidth: true
-                        from: -1.0
-                        value: 0.6
-                        to:1.0
-                        snapMode: Slider.SnapAlways
-                        stepSize: 0.1
+                        from                 : slider_min_value
+                        to                     :slider_max_value
+                        stepSize           :slider_step_value
+                        value                : 0.6
+                        snapMode         : Slider.SnapAlways
+
                     }
                     Text {
-                        id: lbl_saturation_value
-                        text: sld_saturation.value.toFixed(1)//qsTr("-0.3")
+                        id                        : lbl_saturation_value
+                        text                     : sld_saturation.value.toFixed(1)
                         Layout.alignment: Qt.AlignRight
+                        rightPadding        : padding_value
+                        color                    : text_color
                     }
                 }
-
+                //  #################### Denoising ####################
                 RowLayout{
-                    id: row_denoising
-                    Layout.fillWidth: true
+                    id                         : row_denoising
+                    Layout.fillWidth   : true
                     Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                     Layout.topMargin: 20
 
                     Text {
-                        id: lbl_denoising
+                        id                      : lbl_denoising
                         Layout.fillWidth: true
-                        text: qsTr("Denoising")
-                        color: text_color
+                        text                   : qsTr("Denoising")
+                        color                  : text_color
+                        leftPadding        : padding_value
                     }
                     Slider {
-                        id: sld_denoising
+                        id                      : sld_denoising
                         Layout.fillWidth: true
-                        from: -1.0
-                        value: 0
-                        to: +1.0
-                        snapMode: Slider.SnapAlways
-                        stepSize: 0.1
+                        from                 : slider_min_value
+                        to                     : slider_max_value
+                        stepSize           : slider_step_value
+                        value                : 0
+                        snapMode        : Slider.SnapAlways
+
                     }
                     Text {
                         id: lbl_denoising_value
-                        text: sld_denoising.value.toFixed(1) //qsTr("-0.3")
+                        text: sld_denoising.value.toFixed(1)
                         Layout.alignment: Qt.AlignRight
+                        rightPadding        : padding_value
+                        color                    : text_color
                     }
                 }
+                //  #################### Sharpness ####################
                 RowLayout{
-                    id: row_sharp
-                    Layout.fillWidth: true
+                    id                         : row_sharp
+                    Layout.fillWidth   : true
                     Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                     Layout.topMargin: 20
 
                     Text {
-                        id: lbl_sharp
+                        id                      : lbl_sharp
                         Layout.fillWidth: true
-                        text: qsTr("Sharpness")
-                        color: text_color
+                        text                   : qsTr("Sharpness")
+                        color                 : text_color
+                        leftPadding        : padding_value
                     }
                     Slider {
-                        id: sld_sharp
-                        Layout.fillWidth: true
-                        from: -1.0
-                        value: 0
-                        to: 1.0
-                        snapMode: Slider.SnapAlways
-                        stepSize: 0.1
+                        id                       : sld_sharp
+                        Layout.fillWidth : true
+                        from                  : slider_min_value
+                        to                      : slider_max_value
+                        stepSize            : slider_step_value
+                        value                 : 0
+                        snapMode         : Slider.SnapAlways
+
                     }
                     Text {
-                        id: lbl_sharp_value
-                        text: sld_sharp.value.toFixed(1)
+                        id                        : lbl_sharp_value
+                        text                     : sld_sharp.value.toFixed(1)
                         Layout.alignment: Qt.AlignRight
+                        rightPadding        : padding_value
+                        color                    : text_color
                     }
                 }
                 RowLayout{
-                    width: rec_setting.width
+                    width                : rec_setting.width
                     Layout.margins: 30
-
-
+                    //  #################### White Balance####################
                     ButtonGroup { id: whiteBalance }
                     Column {
                         Layout.alignment: Qt.AlignLeft
-                        Layout.fillWidth: true
+                        Layout.fillWidth   : true
                         Label {
                             text: qsTr("White Balance Mode:")
                         }
 
                         RadioButton {
-                            id: rbtn_auto
-                            checked: true
-                            text: qsTr("Auto")
-                            enabled: true
+                            id                           : rbtn_auto
+                            checked                 : true
+                            text                        : qsTr("Auto")
+                            enabled                  : true
                             ButtonGroup.group: whiteBalance
                             onClicked: {
-                                txt_whiteBalanceMode = "Camera.WhiteBalanceAuto"
-                                console.log(txt_whiteBalanceMode)
+                                txt_whiteBalanceMode = Camera.WhiteBalanceAuto
+                            }
+                            contentItem: Text {
+                                text                      : rbtn_auto.text
+                                color                    : text_color
+                                leftPadding          : rbtn_auto.indicator.width + rbtn_auto.spacing
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
 
                         RadioButton {
-                            id: rbtn_sunlight
-                            text: qsTr("Sunlight")
+                            id                           : rbtn_sunlight
+                            text                        : qsTr("Sunlight")
                             ButtonGroup.group: whiteBalance
                             onClicked: {
-                                txt_whiteBalanceMode = "Camera.WhiteBalanceSunlight"
-                                console.log(txt_whiteBalanceMode)
+                                txt_whiteBalanceMode = Camera.WhiteBalanceSunlight
+                            }
+                            contentItem: Text {
+                                text                     : rbtn_sunlight.text
+                                color                    : text_color
+                                leftPadding          : rbtn_sunlight.indicator.width + rbtn_sunlight.spacing
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
 
                         RadioButton {
-                            id: rbtn_cloudy
-                            text: qsTr("Cloudy")
+                            id                           : rbtn_cloudy
+                            text                        : qsTr("Cloudy")
                             ButtonGroup.group: whiteBalance
                             onClicked: {
-                                txt_whiteBalanceMode = "Camera.WhiteBalanceCloudy"
-                                console.log(txt_whiteBalanceMode)
+                                txt_whiteBalanceMode = Camera.WhiteBalanceCloudy
+                            }
+                            contentItem: Text {
+                                text                     : rbtn_cloudy.text
+                                color                    : text_color
+                                leftPadding          : rbtn_cloudy.indicator.width + rbtn_cloudy.spacing
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                         RadioButton {
-                            id: rbtn_shade
-                            text: qsTr("Shade")
+                            id                           : rbtn_shade
+                            text                        : qsTr("Shade")
                             ButtonGroup.group: whiteBalance
                             onClicked:  {
-                                txt_whiteBalanceMode = "Camera.WhiteBalanceShade"
-                                console.log(txt_whiteBalanceMode)
+                                txt_whiteBalanceMode = Camera.WhiteBalanceShade
+                            }
+                            contentItem: Text {
+                                text                      : rbtn_shade.text
+                                color                     : text_color
+                                leftPadding           : rbtn_shade.indicator.width + rbtn_shade.spacing
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                         RadioButton {
-                            id: rbtn_sunset
-                            text: qsTr("Sunset")
+                            id                           : rbtn_sunset
+                            text                        : qsTr("Sunset")
                             ButtonGroup.group: whiteBalance
                             onClicked: {
-                                txt_whiteBalanceMode = "Camera.WhiteBalanceSunset"
-                                console.log(txt_whiteBalanceMode)
+                            }
+                            contentItem: Text {
+                                text                       : rbtn_sunset.text
+                                color                     : text_color
+                                leftPadding           : rbtn_sunset.indicator.width + rbtn_sunset.spacing
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                         RadioButton {
-                            id: rbtn_fluorescent
-                            text: qsTr("Fluorescent")
+                            id                           : rbtn_fluorescent
+                            text                        : qsTr("Fluorescent")
                             ButtonGroup.group: whiteBalance
                             onClicked: {
-                                txt_whiteBalanceMode = "Camera.WhiteBalanceFluorescent"
-                                console.log(txt_whiteBalanceMode)
+                                txt_whiteBalanceMode = Camera.WhiteBalanceFluorescent
+                            }
+                            contentItem: Text {
+                                text                     : rbtn_fluorescent.text
+                                color                    : text_color
+                                leftPadding          : rbtn_fluorescent.indicator.width + rbtn_fluorescent.spacing
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                     }
+                    //  #################### Color Filter ####################
+
                     ButtonGroup { id: colorFilter }
                     Column {
                         Layout.alignment: Qt.AlignRight
@@ -266,61 +344,91 @@ Item {
                         }
 
                         RadioButton {
-                            id: rbtn_none
-                            checked: true
-                            text: qsTr("None")
-                            enabled: true
+                            id                            : rbtn_none
+                            checked                  : true
+                            text                         : qsTr("None")
+                            enabled                  : true
                             ButtonGroup.group: colorFilter
                             onClicked: {
-                                txt_color_filter = "CameraImageProcessing.ColorFilterNone"
-                                console.log(txt_color_filter)
+                                txt_color_filter = CameraImageProcessing.ColorFilterNone
+                            }
+                            contentItem: Text {
+                                text                        : rbtn_none.text
+                                color                    : text_color
+                                leftPadding          : rbtn_none.indicator.width + rbtn_none.spacing
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+
+
+                        RadioButton {
+                            id                              : rbtn_grayscale
+                            text                           : qsTr("Grayscale")
+                            ButtonGroup.group   : colorFilter
+                            onClicked: {
+                            }
+                            contentItem: Text {
+                                text                     : rbtn_grayscale.text
+                                color                   : text_color
+                                leftPadding         : rbtn_grayscale.indicator.width + rbtn_grayscale.spacing
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
 
                         RadioButton {
-                            id: rbtn_grayscale
-                            text: qsTr("Grayscale")
-                            ButtonGroup.group: colorFilter
+                            id                            : rbtn_negative
+                            text                         : qsTr("Negative")
+                            ButtonGroup.group : colorFilter
                             onClicked: {
-                                txt_color_filter = "CameraImageProcessing.ColorFilterGrayscale"
-                                console.log(txt_color_filter)
+                                txt_color_filter = CameraImageProcessing.ColorFilterNegative
                             }
-                        }
-
-                        RadioButton {
-                            id: rbtn_negative
-                            text: qsTr("Negative")
-                            ButtonGroup.group: colorFilter
-                            onClicked: {
-                                txt_color_filter = "CameraImageProcessing.ColorFilterNegative"
-                                console.log(txt_color_filter)
+                            contentItem: Text {
+                                text                      : rbtn_negative.text
+                                color                    : text_color
+                                leftPadding          : rbtn_negative.indicator.width + rbtn_negative.spacing
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                         RadioButton {
-                            id: rbtn_solarize
-                            text: qsTr("Solarize")
+                            id                           : rbtn_solarize
+                            text                        : qsTr("Solarize")
                             ButtonGroup.group: colorFilter
                             onClicked: {
-                                txt_color_filter = "CameraImageProcessing.ColorFilterSolarize"
-                                console.log(txt_color_filter)
+                                txt_color_filter = CameraImageProcessing.ColorFilterSolarize
+                            }
+                            contentItem: Text {
+                                text                     : rbtn_solarize.text
+                                color                    : text_color
+                                leftPadding          : rbtn_solarize.indicator.width + rbtn_solarize.spacing
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                         RadioButton {
-                            id: rbtn_sepia
-                            text: qsTr("Sepia")
+                            id                           : rbtn_sepia
+                            text                        : qsTr("Sepia")
                             ButtonGroup.group: colorFilter
                             onClicked: {
-                                txt_color_filter = "CameraImageProcessing.ColorFilterSepia"
-                                console.log(txt_color_filter)
+                                txt_color_filter = CameraImageProcessing.ColorFilterSepia
+                            }
+                            contentItem: Text {
+                                text                     : rbtn_sepia.text
+                                color                    : text_color
+                                leftPadding          : rbtn_sepia.indicator.width + rbtn_sepia.spacing
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                         RadioButton {
-                            id: rbtn_posterize
-                            text: qsTr("Posterize")
+                            id                           : rbtn_posterize
+                            text                        : qsTr("Posterize")
                             ButtonGroup.group: colorFilter
                             onClicked: {
-                                txt_color_filter = "CameraImageProcessing.ColorFilterPosterize"
-                                console.log(txt_color_filter)
+                                txt_color_filter = CameraImageProcessing.ColorFilterPosterize
+                            }
+                            contentItem: Text {
+                                text                      : rbtn_posterize.text
+                                color                    : text_color
+                                leftPadding          : rbtn_posterize.indicator.width + rbtn_posterize.spacing
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                     }
@@ -333,109 +441,109 @@ Item {
             id: rec_main_view
             Layout.fillHeight: true
             Layout.fillWidth: true
-            //            color: "red"
             Layout.margins: 5
+            color                 : main_color
 
             ColumnLayout
             {
                 id: clm_main_view
                 anchors.fill: parent
-
+                //  ####################### Tab Bar #######################
                 TabBar{
-                    id: tabBar
-                    width:850 // parent.width
-                    Layout.fillWidth: true
-                    Layout.margins:  soft_margin
-                    Layout.topMargin: 10
-                    Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-                    background: Rectangle{
-                        color: "white"
+                    id                           : tabBar
+                    Layout.fillWidth     : true
+                    Layout.leftMargin  : 100
+                    Layout.rightMargin: 100
+                    Layout.topMargin  : 10
+                    Layout.alignment  : Qt.AlignTop | Qt.AlignHCenter
+                    background:
+                        Rectangle{
+                        color: main_color
                     }
 
                     TabButton{
-                        text: qsTr("Take Photo")
-                        background: Rectangle {
-                            color: tabBar.currentIndex == 0 ? "darkgray" : "lightgray"
+                        text            : qsTr("<b>Take Photo</b>")
+                        background:
+                            Rectangle {
+                            color: tabBar.currentIndex == 0 ? first_color : second_color
                             radius: 10
                         }
 
                     }
                     TabButton{
-                        text: qsTr("Galley")
-                        background: Rectangle {
-                            color: tabBar.currentIndex == 1 ? "darkgray" : "lightgray"
+                        text            : qsTr("<b>Galley</b>")
+                        background:
+                            Rectangle {
+                            color: tabBar.currentIndex == 1 ? first_color : second_color
                             radius: 10
                         }
                     }
                     TabButton{
-                        text: qsTr("Send Data")
+                        text            : qsTr("<b>Send Data</b>")
                         background: Rectangle {
-                            color: tabBar.currentIndex == 2 ? "darkgray" : "lightgray"
+                            color: tabBar.currentIndex == 2 ? first_color : second_color
                             radius: 10
                         }
                     }
                 }
-                //                Rectangle{
-                //                    id: rec_tabView
-                //                    Layout.fillWidth: true
-                //                    Layout.fillHeight: true
-                //                    color: "red"//bg_color
-                //                    Layout.alignment: Qt.AlignRight
-                //                    Layout.margins: soft_margin
 
                 StackLayout{
-                    id: stacklayout
+                    id                         : stacklayout
                     Layout.alignment:  Qt.AlignTop
-                    width: parent.width
-                    //                        height: parent.height
-                    currentIndex: tabBar.currentIndex
+                    width                   : parent.width
+                    currentIndex        : tabBar.currentIndex
 
                     Rectangle{
-                        id: rec_webcam_view
+                        id                         : rec_webcam_view
                         Layout.alignment: Qt.AlignTop | Qt.AlignCenter
-                        //                            Layout.fillWidth: true
-                        height: 350
-                        width: 550
+                        height                  : 350
+                        width                   : 550
+                        color                    : main_color
                         Rectangle{
-                            id: rec_btn
-                            width: parent.width
+                            id       : rec_btn
+                            width : parent.width
                             height: 40
-                            //                                color: bg_color
+                            color  : main_color
                             RowLayout
                             {
-
-                                id: row_btn
-                                width: parent.width
+                                id       : row_btn
+                                width : parent.width
                                 height: parent.height
-                                Text {
-                                    id: photoCounter
-                                    text: "#Photos:"+bridge.photoCounter
-                                    font.family: font_name
-                                    font.pixelSize: font_size
-                                    color: "red"
-                                    Layout.alignment: Qt.AlignLeft
-                                }
+
                                 Button{
-                                    id: btn_takePhoto
-                                    text: "Take Photo"
-                                    Layout.alignment: Qt.AlignLeft
-                                    background: Rectangle {
-                                        color: btn_takePhoto.down? "gray" :"darkgray"
-                                        border.color: "black"
-                                        radius: 6
+                                    id                         :btn_takePhoto
+                                    text                      : "<b>Take Photo</b>  ( " +bridge.photoCounter +" )"
+                                    Layout.alignment: Qt.AlignCenter
+                                    contentItem: Item{
+                                        Text{
+                                        anchors.verticalCenter    : parent.verticalCenter
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        anchors.margins             : soft_margin
+                                        text                                 : btn_takePhoto.text
+                                        font.pixelSize                  : font_size
+                                        font.family                      : font_name
+                                        color                               : text_color
+                                        }
+                                    }
+                                    background:
+                                        Rectangle {
+                                        implicitHeight: 40
+                                        implicitWidth : 300
+                                        color              : btn_takePhoto.down? button_color2 :button_color1
+                                        border.color   : btn_takePhoto.activeFocus ? "green" : "black"
+                                        border.width  : border_width
+                                        radius            : 6
                                     }
                                     onClicked: {
-                                        //  camera.imageCapture.captureToLocation("/home/amir/WebcamImages")
                                         camera.imageCapture.captureToLocation(path)
                                         bridge.btnCaptureClicked()
                                         repeater.model = bridge.imagesList
+                                        repeater.update()
                                     }
-
-
                                 }
                             }
-
                         }
+                        //  ####################### Capure Tab#######################
                         Camera {
                             id: camera
                             imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
@@ -450,32 +558,24 @@ Item {
 
                             //                                                        imageCapture {
                             //                                                            onImageCaptured: {
-                            //                                                                photoPreview.source = preview  // Show the preview in an Image
+                            //                                                                photoPreview.source = preview
                             //                                                            }
 
                             //                                                        }
                             imageProcessing {
-                                whiteBalanceMode: txt_whiteBalanceMode //Camera.WhiteBalanceTungsten
-                                //                                {
-                                //                                    rbtn_auto.checked ?Camera.WhiteBalanceAuto :
-                                //                                                        rbtn_cloudy.checked ? Camera.WhiteBalanceCloudy :
-                                //                                                                              rbtn_shade.checked ? Camera.WhiteBalanceShade : Camera.WhiteBalanceTungsten
-                                //                                }
-
-                                contrast: sld_contrast.value
-                                saturation: sld_saturation.value
-                                brightness: sld_brightness.value
-                                denoisingLevel: sld_denoising.value
-                                sharpeningLevel: sld_sharp.value
-
-                                //colorFilter: txt_color_filter //CameraImageProcessing.ColorFilterBlackboard
-
+                                contrast                : sld_contrast.value
+                                saturation             : sld_saturation.value
+                                brightness             : sld_brightness.value
+                                denoisingLevel      : sld_denoising.value
+                                sharpeningLevel    : sld_sharp.value
+                                colorFilter              : txt_color_filter
+                                whiteBalanceMode: txt_whiteBalanceMode
                             }
                         }
                         VideoOutput {
                             source: camera
                             anchors.fill: parent
-                            focus : visible // to receive focus and capture key events when visible
+                            focus : visible
                         }
 
                         Image {
@@ -483,33 +583,33 @@ Item {
                             width: rec_webcam_view.width
                             height: rec_webcam_view.height
                         }
-
                     }
+                     //  ####################### Galley Tab#######################
                     Rectangle{
                         id: galley_tab
-
                         Rectangle{
-                            anchors.fill: parent
+                            anchors.fill   : parent
+                            color: main_color
                             ScrollView
                             {
-                                id: scroll_view
-                                clip: true
-                                anchors.fill: parent
+                                id                               : scroll_view
+                                clip                             : true
+                                anchors.fill                  : parent
                                 anchors.bottomMargin: 50
 
                                 GridLayout{
-                                    id: grid_layout
-                                    anchors.fill: parent
+                                    id                        : grid_layout
+                                    anchors.fill         : parent
                                     anchors.margins: 10
-                                    columns: 3
-                                    rowSpacing: 4
-                                    columnSpacing: 5
+                                    columns             : 3
+                                    rowSpacing        : 4
+                                    columnSpacing  : 5
                                     Repeater{
                                         id: repeater
                                         model:  bridge.imagesList
                                         Image {
-                                            source: "file://"+ path + "/"  +modelData
-                                            sourceSize.width:  320
+                                            source                 : "file://"+ path + "/"  +modelData
+                                            sourceSize.width :  320
                                             sourceSize.height: 300
                                             Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                                         }
@@ -518,20 +618,22 @@ Item {
                             }
                         }
                     }
+                     //  ####################### Galley Tab#######################
                     Rectangle{
-                        id: send_data_tab
+                        id                         : send_data_tab
+                        color                    :main_color
                         ColumnLayout
                         {
-                            id: clmn_layout
+                            id                       : clmn_layout
                             anchors.margins: 50
-                            anchors.fill: parent
+                            anchors.fill         : parent
                             Image {
-                                id: img_selected
-                                source: file_dialog.fileUrl
-                                Layout.fillHeight: true
-                                Layout.fillWidth: true
+                                id                         : img_selected
+                                source                 : file_dialog.fileUrl
+                                Layout.fillHeight  : true
+                                Layout.fillWidth   : true
                                 Layout.alignment: Qt.AlignCenter
-                                sourceSize.width: 520
+                                sourceSize.width : 520
                                 sourceSize.height: 480
                             }
                             RowLayout{
@@ -539,46 +641,67 @@ Item {
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
 
                                 Button{
-                                    id: btn_choose_img
-                                    text: "Choose"
+                                    id                     : btn_choose_img
+                                    text                  : "<b>Choose</b>"
                                     Layout.margins: 10
-                                    background: Rectangle {
-                                        width: 70
-                                        color: btn_choose_img.down? "gray" :"darkgray"
-                                        border.color: "black"
-                                        radius: 6
+                                    contentItem: Item {
+                                        Text {
+                                            anchors.verticalCenter    : parent.verticalCenter
+                                            anchors.horizontalCenter: parent.horizontalCenter
+                                            anchors.margins             : soft_margin
+                                            text                                 : btn_choose_img.text
+                                            font.pixelSize                  : font_size -2
+                                            color                               : text_color
+                                        }
+                                    }
+                                    background:
+                                        Rectangle {
+                                        implicitHeight: 40
+                                        implicitWidth : 150
+                                        color              : btn_choose_img.down? button_color2 :button_color1
+                                        border.color   : btn_choose_img.activeFocus ? "green" : "black"
+                                        border.width  : border_width
+                                        radius            : 6
                                     }
                                     FileDialog{
-                                        id: file_dialog
-                                        title: " Please choose an image:"
-                                        nameFilters: [ "Image files (*.jpg *.png)" ]
+                                        id                   : file_dialog
+                                        title                : " Please choose an image:"
+                                        nameFilters    : [ "Image files (*.jpg *.png)" ]
                                         selectExisting: true
-                                        selectFolder: false
+                                        selectFolder   : false
                                         selectMultiple: false
-                                        folder: shortcuts.home
+                                        folder             : shortcuts.home
                                         onFileUrlChanged:  {
-//                                            selected_image_path = file_dialog.fileUrl
                                             bridge.selectedImagePath = file_dialog.fileUrl
                                         }
-
                                     }
-
                                     onClicked: {
                                         file_dialog.open()
-//                                        bridge.selectedImagePath = selected_image_path //file_dialog.fileUrl
-//                                        console.log("3"+selected_image_path)
                                     }
-
-
                                 }
                                 Button{
-                                    id: btn_send_img
-                                    text: "Send"
+                                    id                     : btn_send_img
+                                    text                  : "<b>Send</b>"
                                     Layout.margins: 10
-                                    background: Rectangle {
-                                        color: btn_send_img.down? "gray" :"darkgray"
-                                        border.color: "black"
-                                        radius: 6
+                                    contentItem: Item{
+                                        Text {
+                                            anchors.verticalCenter    : parent.verticalCenter
+                                            anchors.horizontalCenter: parent.horizontalCenter
+                                            anchors.margins             : soft_margin
+                                            text                                 : btn_send_img.text
+                                            font.pixelSize                  : font_size -2
+                                            color                               : text_color
+                                        }
+                                    }
+
+                                    background:
+                                        Rectangle {
+                                        implicitHeight: 40
+                                        implicitWidth : 150
+                                        color              : btn_send_img.down? button_color2 :button_color1
+                                        border.color   : btn_send_img.activeFocus ? "green" : "black"
+                                        border.width  : border_width
+                                        radius            : 6
                                     }
                                     onClicked: {
                                         bridge.btnSendClicked()
@@ -589,13 +712,10 @@ Item {
                     }
                 }
 
-                //                }
-
             } //clm_main_view
 
         } // rec_main_view
 
-
-
     } // main_row_layout
+    }
 }

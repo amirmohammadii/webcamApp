@@ -9,7 +9,7 @@ class MyServer: public QObject
 {
     Q_OBJECT
 public:
-    explicit MyServer(QObject* parent = nullptr);
+    explicit MyServer( QObject* parent = nullptr);
 
 signals:
 public slots:

@@ -15,19 +15,28 @@ class MyClient: public QObject
     Q_OBJECT
 public:
     explicit MyClient(QSharedPointer<WebcamUi> _ui, QObject* parent = nullptr);
+    ///
+    /// \brief connect
+    ///This function init connection of client
     void connect();
+    ///
+    /// \brief sendData
+    /// This function will send a selected image to a server.
+    /// \param selectedImagePath: full path of selected image.
+    ///
     void sendData(QString selectedImagePath);
+    ///
+    /// \brief loadSelectedImage
+    /// This function load the selected image form it's directory
+    /// \param selectedImagePath
+    /// \return QByteArray of selected image
+    ///
     QByteArray loadSelectedImage(QString selectedImagePath);
 
-
-signals:
-
-public slots:
 
 private:
     QTcpSocket* socket;
     QSharedPointer<WebcamUi> _webcamUi;
-//    WebcamUi* _webcamUi;
 
 
 

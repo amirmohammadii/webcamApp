@@ -12,12 +12,11 @@ MyClient::MyClient(QSharedPointer<WebcamUi> _ui, QObject* parent):
 void MyClient::connect()
 {
 
-    socket->connectToHost(QHostAddress(QHostAddress::LocalHost), 80);
+    socket->connectToHost(QHostAddress(QHostAddress::LocalHost), 54321);
     //    socket->connectToHost("google.com", 80);
     if (socket->waitForConnected(5000))
     {
         qDebug() << "Connected!";
-        //        sendData( _webcamUi->selectedImagePath());
     }
     else
     {
