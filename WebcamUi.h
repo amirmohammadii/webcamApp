@@ -36,6 +36,7 @@ public:
 signals:
     void btnCaptureClicked();
     void btnSendClicked();
+    void radioBtnGalleryClicked();
 
 
 private:

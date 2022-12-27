@@ -10,13 +10,15 @@ class MyServer: public QObject
     Q_OBJECT
 public:
     explicit MyServer( QObject* parent = nullptr);
+    ~MyServer();
 
 signals:
 public slots:
     void newConnection();
 
 private:
-    QTcpServer* server;
+    QTcpServer* _server;
+    QTcpSocket* _socket;
 
 
 };

@@ -3,11 +3,12 @@
 MyServer::MyServer(QObject* parent):
     QObject(parent)
 {
-server = new QTcpServer(this);
+_server = new QTcpServer(this);
+_socket = new QTcpSocket(this);
 //connect(server, &QTcpServer::newConnection, this, &MyServer::newConnection);
-connect(server, SIGNAL(newConnection()), this, SLOT(newConnection()));
+connect(_server, SIGNAL(newConnection()), this, SLOT(newConnection()));
 
-if(!server->listen(QHostAddress::Any, 1234))
+if(!_server->listen(QHostAddress::Any, 1234))
 {
     qDebug() << "Server could not start!";
 }
@@ -17,12 +18,18 @@ else
 }
 }
 
+MyServer::~MyServer()
+{
+    delete _server;
+    delete _socket;
+}
+
 void MyServer::newConnection()
 {
-    QTcpSocket* socket = server->nextPendingConnection();
+    _socket = _server->nextPendingConnection();
 
-    socket->write("hello\r\n");
-    socket->flush();
-    socket->waitForBytesWritten(3000);
-    socket->close();
+    _socket->write("hello\r\n");
+    _socket->flush();
+    _socket->waitForBytesWritten(3000);
+    _socket->close();
 }

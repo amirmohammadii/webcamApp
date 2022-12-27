@@ -15,6 +15,7 @@ class MyClient: public QObject
     Q_OBJECT
 public:
     explicit MyClient(QSharedPointer<WebcamUi> _ui, QObject* parent = nullptr);
+    ~MyClient();
     ///
     /// \brief connect
     ///This function init connection of client

@@ -12,8 +12,8 @@ class WebCamHandler:public QObject
 {
     Q_OBJECT
 public:
-   explicit WebCamHandler(QSharedPointer<WebcamUi> _ui, QObject* parent = nullptr);
-
+    explicit WebCamHandler(QSharedPointer<WebcamUi> _ui, QString myPath, QObject* parent = nullptr);
+    ~WebCamHandler();
     ///
     /// \brief readImages
     /// \param dir: direcoty that contains captured photos.
@@ -21,10 +21,16 @@ public:
     ///
     QStringList readImages(QDir dir);
     ///
-    /// \brief createPath
+    /// \brief createDir
     /// \return return the created a directory that images will save in it.
     ///
-    QDir createPath();
+    QDir createDir(QString myPath);
+    ///
+    /// \brief path
+    /// Getter for get the directory witch images will save in it.
+    /// \return
+    ///
+    QString path() {return _path;}
 
 public slots:
     ///
@@ -36,10 +42,17 @@ public slots:
     /// \brief onBtnSendClicked
     ///This function call will "Send" button  clicked
     void onBtnSendClicked();
+    ///
+    /// \brief onRadioBtnGalleryclicked
+    /// This function will reload stored images to show in "Gallery" tab
+    void onRadioBtnGalleryclicked();
 
 private:
-    WebcamUi* _webcamui;
-    MyClient*  _client;
+    //    WebcamUi* _webcamui;
+    //    MyClient*  _client;
+    QString _path;
+    QSharedPointer<MyClient> _client;
+    QSharedPointer<WebcamUi> _webcamui;
 
 };
 

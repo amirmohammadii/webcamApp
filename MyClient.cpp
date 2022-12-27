@@ -6,14 +6,19 @@ MyClient::MyClient(QSharedPointer<WebcamUi> _ui, QObject* parent):
     QObject(parent),
     _webcamUi{_ui}
 {
-    socket = new QTcpSocket(this);
+    socket = new QTcpSocket();
+}
+
+MyClient::~MyClient()
+{
+    delete socket;
 }
 
 void MyClient::connect()
 {
 
-    socket->connectToHost(QHostAddress(QHostAddress::LocalHost), 54321);
-    //    socket->connectToHost("google.com", 80);
+    //    socket->connectToHost(QHostAddress(QHostAddress::LocalHost), 54321,QIODevice::ReadWrite);
+    socket->connectToHost("127.0.0.1", 54321);
     if (socket->waitForConnected(5000))
     {
         qDebug() << "Connected!";
@@ -39,13 +44,16 @@ void MyClient::sendData(QString selectedImagePath)
 
 QByteArray MyClient::loadSelectedImage(QString selectedImagePath)
 {
-    QImage * imageObject = new QImage();
+    //    QImage * imageObject = new QImage();
+    QImage imageObject;
     QPixmap image;
-    imageObject->load(selectedImagePath);
-    image =  QPixmap::fromImage(*imageObject);
     QByteArray ba;
-    QBuffer buffer(&ba);
-    buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "jpg");
+    if (imageObject.load(selectedImagePath))
+    {
+        image = QPixmap::fromImage(imageObject);
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        image.save(&buffer, "jpg");
+    }
     return ba;
 }
